@@ -40,8 +40,8 @@ public class ATMTransaction {
         this.transactionAmount = transactionAmount;
         this.transactionType = transactionType;
         this.accountBalance = accountBalance;
-        // 根据余额自动判断状态
-        this.status = "Pending";
+        // 默认状态为 Rejected，处理成功后更新为 Successful
+        this.status = "Rejected";
     }
 
     // ============ Getter 和 Setter 方法 (Methods) ============
@@ -97,22 +97,61 @@ public class ATMTransaction {
     // ============ 业务方法 (Business Methods) ============
 
     /**
-     * 处理提款交易 - 使用 if/else 判断余额是否足够
-     * 足够 -> Successful
-     * 不足 -> Rejected
+     * 处理交易 - 使用 switch 区分交易类型，if/else 判断 Successful / Rejected
+     *
+     * Withdrawal / Fast Cash / Transfer:
+     *   余额足够 -> Successful (扣款)
+     *   余额不足 -> Rejected
+     *
+     * Deposit:
+     *   始终 Successful (余额增加)
+     *
+     * Balance Inquiry:
+     *   始终 Successful (余额不变)
      */
-    public void processWithdrawal() {
+    public void processTransaction() {
+        // 金额校验 (if/else)
         if (transactionAmount <= 0) {
             status = "Rejected";
             System.out.println("  [错误] 交易金额必须大于零!");
-        } else if (accountBalance >= transactionAmount) {
-            accountBalance -= transactionAmount;
-            status = "Successful";
-            System.out.println("  [成功] 提款 $" + transactionAmount + " 已完成。");
-        } else {
-            status = "Rejected";
-            System.out.println("  [拒绝] 余额不足! 当前余额: $" + accountBalance
-                    + ", 提款金额: $" + transactionAmount);
+            return;
+        }
+
+        // switch 根据交易类型执行不同逻辑 (PDF要求)
+        switch (transactionType) {
+            case "Withdrawal":
+            case "Fast Cash":
+            case "Transfer":
+                // if/else - 判断余额是否足够 (PDF核心要求)
+                if (accountBalance >= transactionAmount) {
+                    accountBalance -= transactionAmount;
+                    status = "Successful";
+                    System.out.println("  [成功] " + transactionType
+                            + " $" + transactionAmount + " 已完成。");
+                } else {
+                    status = "Rejected";
+                    System.out.println("  [拒绝] 余额不足! 当前余额: $" + accountBalance
+                            + ", 交易金额: $" + transactionAmount);
+                }
+                break;
+
+            case "Deposit":
+                // 存款始终成功，余额增加
+                accountBalance += transactionAmount;
+                status = "Successful";
+                System.out.println("  [成功] 存款 $" + transactionAmount
+                        + " 已完成。新余额: $" + accountBalance);
+                break;
+
+            case "Balance Inquiry":
+                // 余额查询始终成功，余额不变
+                status = "Successful";
+                System.out.println("  [成功] 余额查询完成。当前余额: $" + accountBalance);
+                break;
+
+            default:
+                status = "Rejected";
+                System.out.println("  [错误] 未知交易类型: " + transactionType);
         }
     }
 

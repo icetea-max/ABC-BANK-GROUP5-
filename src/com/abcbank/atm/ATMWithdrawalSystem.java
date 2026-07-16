@@ -108,7 +108,12 @@ public class ATMWithdrawalSystem {
 
     /**
      * 案例1: 添加交易记录
-     * 使用 Scanner 获取用户输入，创建 ATMTransaction 对象放入 Array
+     * 流程:
+     *   1. 输入 Customer ID 和 Account Number
+     *   2. 检查账户是否存在 -> 不存在则创建(余额=0), 存在则显示余额
+     *   3. 选择交易类型
+     *   4. 输入交易金额
+     *   5. 处理交易 (if/else 判断 Successful / Rejected)
      */
     private void addTransaction(Scanner scanner) {
         // if/else - 判断Array是否已满
@@ -119,31 +124,79 @@ public class ATMWithdrawalSystem {
 
         System.out.println("\n========== 添加第 " + (transactionCount + 1) + " 条交易记录 ==========");
 
-        // Scanner 读取用户输入 (PDF要求)
+        // ---- 第1步: Scanner 读取客户ID和账户号码 (PDF要求) ----
         System.out.print("客户ID (Customer ID):     ");
         String customerId = scanner.nextLine();
 
         System.out.print("账户号码 (Account Number): ");
         String accountNumber = scanner.nextLine();
 
+        // ---- 第2步: 使用 if/else + Loop 检查账户是否存在 ----
+        double currentBalance = findAccountBalance(customerId, accountNumber);
+
+        // if/else - 判断账户是否已存在
+        if (currentBalance < 0) {
+            // 账户不存在 -> 创建新账户，余额默认置为 0
+            System.out.println("\n[提示] 客户ID " + customerId + " 的账户 " + accountNumber + " 不存在!");
+            System.out.println("[系统] 正在为您创建新账户...");
+            currentBalance = 0.0;
+            System.out.println("[成功] 新账户已创建! 客户ID: " + customerId
+                    + ", 账户号码: " + accountNumber + ", 当前余额: $0.00");
+        } else {
+            // 账户存在 -> 显示当前余额
+            System.out.println("\n[提示] 账户已存在! 当前余额: $" + String.format("%.2f", currentBalance));
+        }
+
+        // ---- 第3步: switch 选择交易类型 (PDF要求) ----
+        String transactionType = selectTransactionType(scanner);
+
+        // ---- 第4步: Scanner 读取交易金额 ----
         System.out.print("交易金额 (Transaction Amount): $");
         double amount = scanner.nextDouble();
         scanner.nextLine(); // 消费换行符
 
-        // switch 选择交易类型 (PDF要求)
-        String transactionType = selectTransactionType(scanner);
-
-        System.out.print("当前账户余额 (Account Balance): $");
-        double balance = scanner.nextDouble();
-        scanner.nextLine(); // 消费换行符
-
-        // 创建Object对象并存入Array
+        // ---- 第5步: 创建Object对象并立即处理交易 ----
         ATMTransaction transaction = new ATMTransaction(
-                customerId, accountNumber, amount, transactionType, balance);
+                customerId, accountNumber, amount, transactionType, currentBalance);
         transactions[transactionCount] = transaction;
         transactionCount++;
 
-        System.out.println("\n[成功] 交易记录已添加! (当前共 " + transactionCount + " 条记录)");
+        // 立即处理提款交易，使用 if/else 判断 Successful / Rejected
+        System.out.println("\n--- 处理交易结果 ---");
+        transaction.processTransaction();
+
+        // if/else - 根据状态打印对应的结果信息
+        if (transaction.getStatus().equals("Successful")) {
+            System.out.println(">>> 交易成功 (Successful) <<<");
+        } else {
+            System.out.println(">>> 交易失败 (Rejected) <<<");
+        }
+
+        System.out.println("[成功] 交易记录添加成功! (当前共 " + transactionCount + " 条记录)");
+    }
+
+    /**
+     * 查找账户余额 - 使用 for Loop 在 Array 中搜索匹配的客户ID和账户号码
+     *
+     * @param customerId    客户ID
+     * @param accountNumber 账户号码
+     * @return 账户当前余额，如果账户不存在则返回 -1.0
+     */
+    private double findAccountBalance(String customerId, String accountNumber) {
+        double balance = -1.0; // 初始值 -1 表示未找到
+
+        // for Loop - 遍历Array查找已有账户 (PDF要求)
+        for (int i = 0; i < transactionCount; i++) {
+            ATMTransaction txn = transactions[i];
+
+            // if 条件: 同时匹配客户ID和账户号码
+            if (txn.getCustomerId().equals(customerId)
+                    && txn.getAccountNumber().equals(accountNumber)) {
+                balance = txn.getAccountBalance(); // 获取最新的余额
+            }
+        }
+
+        return balance; // 返回余额 或 -1(未找到)
     }
 
     /**
@@ -208,7 +261,7 @@ public class ATMWithdrawalSystem {
             System.out.println("  金额:   $" + String.format("%.2f", txn.getTransactionAmount()));
 
             // if/else - 判断提款是否成功 (PDF核心要求: Successful / Rejected)
-            txn.processWithdrawal();
+            txn.processTransaction();
 
             // 再次用 if/else 显示最终状态
             if (txn.getStatus().equals("Successful")) {
