@@ -1,0 +1,142 @@
+
+    ABC  Java ABC Bank Java Development Sprint
+    Scenario
+
+ ABC ABC Bank
+ ABC  Java Junior Java Developer
+
+ Code
+Review
+
+    
+
+    · 
+    · Code Review
+    · 
+
+    · 
+
+
+
+ 5 
+
+
+
+·  Lead Developer
+
+·  Software Engineer
+
+·  QA Engineer
+
+·  Code Reviewer
+
+·  Technical Presenter
+
+ 30 
+ 
+
+Customer Account Management
+
+    · Array 5 
+    · 
+    · 
+             o Active
+             o Inactive
+
+Loan Repayment Calculator
+
+
+    ·  5 
+    · 
+    · 
+
+             o Completed
+             o Outstanding
+
+Fixed Deposit Management
+
+
+    ·  5 
+    · Simple Interest
+    · 
+
+             o 
+             o 
+             o Maturity Amount
+
+Credit Card Payment System
+
+    ·  5 
+    · 
+    · 
+    · 
+
+             o Paid Off
+             o Payment Required
+
+ATM ATM Withdrawal System
+
+
+    ·  5 
+    · 
+    · 
+    · 
+
+             o Successful
+             o Rejected
+
+Savings Account Interest Calculator
+
+
+    ·  5 
+    · 
+    · 
+
+             o Original Balance
+             o Interest Earned
+             o New Balance
+
+Bank Transaction Record System
+
+
+· Array 5 
+
+
+
+· Customer ID
+
+· Account Number
+
+· Transaction Amount
+
+· Transaction Type
+
+_________________________________________________________________________________
+
+
+
+ Java 
+
+·  Variables
+
+·  Scanner 
+
+·  if / else 
+
+·  switch
+
+·  Loops
+
+·  Arrays
+
+·  Classes
+
+·  Objects
+
+·  Methods
+
+·  Java Organising Java Classes
+
+ Java 
+
+
