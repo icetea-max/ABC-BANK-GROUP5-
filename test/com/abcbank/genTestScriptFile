@@ -1,0 +1,53 @@
+# Goal: Generate Complete Functional Test Script for Java Project
+## Task Overview
+Create a full, executable functional test script to verify all functions of a target Java project with zero missing requirements.
+
+## Input Materials
+1. Java Project Basic Info
+<java_project_description>
+{{JAVA_PROJECT_DESCRIPTION}}
+</java_project_description>
+
+2. All Functional Requirements to test
+<functional_requirements>
+{{FUNCTIONAL_REQUIREMENTS}}
+</functional_requirements>
+
+## Strict Writing Standards
+1. Coverage: Cover every functional requirement completely, no missing logic.
+2. Structure: Split test cases by functional modules, multiple test points under each module.
+3. Mandatory fields for every single test point:
+   - Unique Test ID
+   - Clear Test Objective
+   - Detailed Preconditions
+   - Step-by-step operable Test Steps
+   - Verifiable Expected Result
+4. Naming & Numbering: Use unified clear number rules for easy execution and maintenance.
+5. Step rules: All operations must be concrete; ambiguous descriptions are forbidden.
+6. Result rules: Expected outcomes must be definite and match corresponding functional requirements.
+
+## Fixed Output Format
+Wrap all content inside `<Test Script>` tag, follow the template below strictly:
+<Test Script>
+# Test Script: Functional Integrity Test of [Fill in Project Name]
+## Module 1: [Module Name]
+### Test Point 1.1: [Test Objective]
+- Preconditions: [Specific preconditions]
+- Test Steps:
+  1. Step description
+  2. Step description
+- Expected Result: [Specific verifiable result]
+
+### Test Point 1.2: [Test Objective]
+- Preconditions: [Specific preconditions]
+- Test Steps:
+  1. Step description
+- Expected Result: [Specific verifiable result]
+
+## Module 2: [Module Name]
+### Test Point 2.1: [Test Objective]
+...
+</Test Script>
+
+## Final Delivery Requirement
+Make sure all functional demands are fully covered; each test point can be directly run and verified.
